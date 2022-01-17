@@ -86,7 +86,61 @@ namespace Documentation
             }
             Save();
         }
-       
+        public void Create(string name)
+        {
+
+            try
+            {
+                if (name != "")
+                    ObjWorkBook.SaveAs(path + $"{name}.xlsx",
+                        Type.Missing,
+                        Type.Missing,
+                        Type.Missing,
+                        Type.Missing,
+                        Type.Missing,
+                        Excel.XlSaveAsAccessMode.xlShared,
+                        Type.Missing,
+                        Type.Missing,
+                        Type.Missing,
+                        Type.Missing,
+                        Type.Missing);
+
+                ObjWorkBook.Close(false, Type.Missing, Type.Missing);
+            }
+            finally
+            {
+                Marshal.ReleaseComObject(ObjWorkBook);
+            }
+        }
+        public void CreateWorkJournal()
+        {
+            
+            try
+            {
+                Sheet.Name = "Журнал выполненных работ";
+                Set(column: "A", row: 1, "#");
+                Set(column: "B", row: 1, "Наименование работы");
+                Set(column: "C", row: 1, "Объем работы");
+                Set(column: "D", row: 1, "Цена за единицу объема, руб");
+                Set(column: "E", row: 1, "Итоговая цена");
+            }
+            finally
+            {
+                Marshal.ReleaseComObject(Sheet);
+            }
+        }
+        public void CreateSmeta(string name)
+        {
+            var sheets = ObjWorkBook.Sheets;
+            Sheet = sheets.Add();
+            Sheet.Name = name;
+            Set(column: "A", row: 1, "#");
+            Set(column: "B", row: 1, "Наименование");
+            Set(column: "C", row: 1, "Объем");
+            Set(column: "D", row: 1, "Цена за единицу объема, руб");
+            Set(column: "E", row: 1, "Итоговая цена");
+
+        }
         private void Set(string column, int row, string data)
         {
             Excel.Range range = Sheet.Cells;
