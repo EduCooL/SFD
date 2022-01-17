@@ -129,55 +129,32 @@ namespace Documentation
                 Marshal.ReleaseComObject(Sheet);
             }
         }
-        public void CreateSmeta(string name)
-        {
-            var sheets = ObjWorkBook.Sheets;
-            Sheet = sheets.Add();
-            Sheet.Name = name;
-            Set(column: "A", row: 1, "#");
-            Set(column: "B", row: 1, "Наименование");
-            Set(column: "C", row: 1, "Объем");
-            Set(column: "D", row: 1, "Цена за единицу объема, руб");
-            Set(column: "E", row: 1, "Итоговая цена");
+        
 
-        }
-        private void Set(string column, int row, string data)
+        public void Close()
         {
-            Excel.Range range = Sheet.Cells;
             try
             {
-                range[row, column] = data;
-                range[row, column].EntireColumn.AutoFit();
+                ObjWorkExcel.Quit();
             }
             finally
             {
-                Marshal.ReleaseComObject(range);
+                Marshal.ReleaseComObject(ObjWorkExcel);
+            }
+
+            System.Diagnostics.Process[] process = System.Diagnostics.Process.GetProcessesByName("Excel");
+            foreach (System.Diagnostics.Process p in process)
+            {
+                if (!string.IsNullOrEmpty(p.ProcessName))
+                {
+                    try
+                    {
+                        p.Kill();
+                    }
+                    catch { }
+                }
             }
         }
-       
-        public void Open(string filename)
-        {
-            ObjWorkBook =  Workbooks.Open(path + filename);
-        }
-        public List<string> GetSheetsList()
-        {
-            
-            var sheets = ObjWorkBook.Sheets;
-            var names = new List<string>();
-            for(var i = 1; i <= sheets.Count; i++)
-                if(sheets[i].Name != "Журнал выполненных работ")
-                names.Add(sheets[i].Name);
-            Marshal.ReleaseComObject(sheets);
-            return names;
-        }
-        public void Save()
-        {
-            
-            ObjWorkBook.Save();
-
-        }
-
-       
 
 
 
