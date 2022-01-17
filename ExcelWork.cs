@@ -177,30 +177,7 @@ namespace Documentation
 
         }
 
-        public void Close()
-        {
-            try
-            {
-                ObjWorkExcel.Quit();
-            }
-            finally
-            {
-                Marshal.ReleaseComObject(ObjWorkExcel);
-            }
-
-            System.Diagnostics.Process[] process = System.Diagnostics.Process.GetProcessesByName("Excel");
-            foreach (System.Diagnostics.Process p in process)
-            {
-                if (!string.IsNullOrEmpty(p.ProcessName))
-                {
-                    try
-                    {
-                        p.Kill();
-                    }
-                    catch { }
-                }
-            }
-        }
+       
 
 
 
