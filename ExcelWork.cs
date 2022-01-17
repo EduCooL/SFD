@@ -65,63 +65,28 @@ namespace Documentation
         }
         public void Calculated()
         {
-            
-        }
-        public void Create(string name)
-        {
-
-            try
+            for (var i = 1; i <= ObjWorkBook.Sheets.Count; i++)
             {
-                if (name != "")
-                    ObjWorkBook.SaveAs(path + $"{name}.xlsx",
-                        Type.Missing,
-                        Type.Missing,
-                        Type.Missing,
-                        Type.Missing,
-                        Type.Missing,
-                        Excel.XlSaveAsAccessMode.xlShared,
-                        Type.Missing,
-                        Type.Missing,
-                        Type.Missing,
-                        Type.Missing,
-                        Type.Missing);
-
-                ObjWorkBook.Close(false, Type.Missing, Type.Missing);
+                Sheet = ObjWorkBook.Sheets[i];
+                var range = Sheet.UsedRange;
+                int a, b, p, t;
+                string s = "";
+                for(var j = 2;j <= range.Rows.Count; j++ )
+                if((range.Cells[j, "C"] as Excel.Range).Value2 != null &&
+                        (range.Cells[j, "D"] as Excel.Range).Value2 != null &&
+                        int.TryParse(range.Cells[j, "C"].Text, out t) &&
+                        int.TryParse(range.Cells[j, "D"].Text, out t))
+                {
+                     a = int.Parse(Sheet.Cells[j, "C"].Text);
+                     b = int.Parse(Sheet.Cells[j, "D"].Text);
+                     p = a * b;
+                     s = p.ToString();
+                     Set(column: "E", row: j, s);
+                }
             }
-            finally
-            {
-                Marshal.ReleaseComObject(ObjWorkBook);
-            }
+            Save();
         }
-        public void CreateWorkJournal()
-        {
-            
-            try
-            {
-                Sheet.Name = "Журнал выполненных работ";
-                Set(column: "A", row: 1, "#");
-                Set(column: "B", row: 1, "Наименование работы");
-                Set(column: "C", row: 1, "Объем работы");
-                Set(column: "D", row: 1, "Цена за единицу объема, руб");
-                Set(column: "E", row: 1, "Итоговая цена");
-            }
-            finally
-            {
-                Marshal.ReleaseComObject(Sheet);
-            }
-        }
-        public void CreateSmeta(string name)
-        {
-            var sheets = ObjWorkBook.Sheets;
-            Sheet = sheets.Add();
-            Sheet.Name = name;
-            Set(column: "A", row: 1, "#");
-            Set(column: "B", row: 1, "Наименование");
-            Set(column: "C", row: 1, "Объем");
-            Set(column: "D", row: 1, "Цена за единицу объема, руб");
-            Set(column: "E", row: 1, "Итоговая цена");
-
-        }
+       
         private void Set(string column, int row, string data)
         {
             Excel.Range range = Sheet.Cells;
