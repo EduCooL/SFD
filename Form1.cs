@@ -61,6 +61,72 @@ namespace Documentation
             this.Hide();       
         }
 
-        
+        private void listBox1_MouseDoubleClick(object sender, MouseEventArgs e)//выбор из списка
+        {
+            
+            SelectDocumentation();
+        }
+
+        private void toolStripMenuItem3_Click(object sender, EventArgs e)//документация изменить
+        {
+            SelectDocumentation();
+        }
+
+        private void toolStripMenuItem10_Click(object sender, EventArgs e)//Журнал октрыть изменить
+        {
+            this.Hide();
+            Form3 form3 = new Form3();
+            filename = listBox1.GetItemText(listBox1.SelectedItem);
+            if (filename == "")
+            {
+            filename = listBox1.Items[0].ToString();
+            }
+            excel.Open(filename);
+            excel.Calculated();
+            form3.filename = filename;
+            string name = "Журнал выполненных работ";
+            form3.dataGridView1.DataSource = excel.GetData(name);
+            form3.Text = $"СФД: Журнал выполненных работ - {filename}";
+            form3.Show();
+            
+        }
+
+        private void toolStripMenuItem4_Click(object sender, EventArgs e)// документация сохранить
+        {
+            excel.Save();
+        }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            excel.Close();
+        }
+
+        private void ShowList()//Вывод списка
+        {
+            string path = "C:\\Users\\Public\\Documents\\Documentation\\";
+            listBox1.Items.Clear();
+            DirectoryInfo dinfo = new DirectoryInfo(path);
+            FileInfo[] files = dinfo.GetFiles("*.xlsx");
+            foreach (FileInfo filenames in files)
+            {
+                listBox1.Items.Add(filenames);
+            }
+        }
+        private void SelectDocumentation()//Открытие нужного файла
+        {
+            this.Hide();
+              
+            string filename = listBox1.GetItemText(listBox1.SelectedItem);
+            if (filename == "")
+            {
+                filename = listBox1.Items[0].ToString();
+            }
+            excel.Open(filename);
+            excel.Calculated();
+            SmetsWindow.Text = $"СФД: Смета - {filename}";
+            ((Label)SmetsWindow.Controls["label1"]).Text = $"Список смет - {filename}";
+            
+            SmetsWindow.Show();
+        }
     }
 }
