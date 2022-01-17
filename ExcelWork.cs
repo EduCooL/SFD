@@ -13,7 +13,11 @@ namespace Documentation
     
     public class ExcelWork
     {
-        
+        static Excel.Application ObjWorkExcel;
+        static Excel.Workbook ObjWorkBook;
+        static Excel.Worksheet Sheet;
+        static Excel.Workbooks Workbooks;
+        string path = "C:\\Users\\Public\\Documents\\Documentation\\";
         
 
         public DataTable GetData(string name)
@@ -61,26 +65,7 @@ namespace Documentation
         }
         public void Calculated()
         {
-            for (var i = 1; i <= ObjWorkBook.Sheets.Count; i++)
-            {
-                Sheet = ObjWorkBook.Sheets[i];
-                var range = Sheet.UsedRange;
-                int a, b, p, t;
-                string s = "";
-                for(var j = 2;j <= range.Rows.Count; j++ )
-                if((range.Cells[j, "C"] as Excel.Range).Value2 != null &&
-                        (range.Cells[j, "D"] as Excel.Range).Value2 != null &&
-                        int.TryParse(range.Cells[j, "C"].Text, out t) &&
-                        int.TryParse(range.Cells[j, "D"].Text, out t))
-                {
-                     a = int.Parse(Sheet.Cells[j, "C"].Text);
-                     b = int.Parse(Sheet.Cells[j, "D"].Text);
-                     p = a * b;
-                     s = p.ToString();
-                     Set(column: "E", row: j, s);
-                }
-            }
-            Save();
+            
         }
         public void Create(string name)
         {
