@@ -13,11 +13,7 @@ namespace Documentation
     
     public class ExcelWork
     {
-        static Excel.Application ObjWorkExcel;
-        static Excel.Workbook ObjWorkBook;
-        static Excel.Worksheet Sheet;
-        static Excel.Workbooks Workbooks;
-        string path = "C:\\Users\\Public\\Documents\\Documentation\\";
+        
         
 
         public DataTable GetData(string name)
